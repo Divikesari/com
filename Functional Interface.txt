@@ -1,0 +1,104 @@
+1)Number/char checker
+
+package com.functional.Interface;
+
+interface NumberChecker {
+    boolean checkNumber(int num);
+}
+@FunctionalInterface
+interface CharChecker {
+    void checkChar(char ch);
+}
+public class Demo {
+    public static boolean isPrime(int number) {
+        if (number <= 1) return false;
+        for (int i = 2; i <= number/2; i++) {
+            if (number % i == 0) return false;
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        NumberChecker numberChecker = new NumberChecker() {
+            @Override
+            public boolean checkNumber(int num) {
+                boolean res = isPrime(num);
+                System.out.println(num + " is prime " + res);
+                return res;
+            }
+        };
+        numberChecker.checkNumber(7);
+        CharChecker charChecker = new CharChecker() {
+            @Override
+            public void checkChar(char ch) {
+                int ascii = (int) ch;
+                boolean result = isPrime(ascii);
+                System.out.println("ASCII value of '" + ch + "' is " + ascii + ". Is prime " + result);
+            }
+        };
+        charChecker.checkChar('A');
+    }
+}
+
+
+
+
+2)Demo.java
+
+package com.functional.Interface;
+import java.util.function.Function;
+public class SensorData{
+	private double temperature;
+	private double humidity;
+}
+public SensorData(double temperature,double humidity) {
+	this.temperature=temperature;
+	this.humidity=humidity;
+}
+
+public double getTemperature() {
+	return temperature;
+}
+
+public void setTemperature(double temperature) {
+	this.temperature = temperature;
+}
+
+public double getHumidity() {
+	return humidity;
+}
+
+public void setHumidity(double humidity) {
+	this.humidity = humidity;
+}
+
+public class Main {
+	public static void main(String[] args) {
+		SensorData sensorData=new SensorData(10.0,100.5);
+		 double threshold = 25.0;
+		 Function<SensorData, Double> extractTemp = new Function<SensorData, Double>() {
+	            @Override
+	            public Double apply(SensorData d) {
+	                return d.getTemperature();
+	            }
+	        };
+	        double temp = extractTemp.apply(data);
+	        System.out.println("Extracted Temperature: " + temp);
+
+	        // Function to check if temperature is above threshold
+	        Function<Double, Boolean> checkThreshold = new Function<Double, Boolean>() {
+	            @Override
+	            public Boolean apply(Double t) {
+	                return t > threshold;
+	            }
+	        };
+
+	        boolean isAboveThreshold = checkThreshold.apply(temp);
+	        System.out.println("Is temperature above threshold? " + isAboveThreshold);
+
+
+	}
+
+}
+
+
